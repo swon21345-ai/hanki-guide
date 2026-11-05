@@ -5,10 +5,12 @@
 //  (데모 모드: 입력 내용이 내 브라우저에만 저장되고, 메일 없이 바로 로그인)
 // =============================================================
 const FIREBASE_CONFIG = {
-  apiKey: "여기에_API_KEY",
-  authDomain: "여기에.firebaseapp.com",
-  projectId: "여기에_PROJECT_ID",
-  appId: "여기에_APP_ID",
+  apiKey: "AIzaSyDqi3jKL5B4xRk-F6KzRqPNWTHE2pUPB5k",
+  authDomain: "hanki-guide.firebaseapp.com",
+  projectId: "hanki-guide",
+  storageBucket: "hanki-guide.firebasestorage.app",
+  messagingSenderId: "442434069091",
+  appId: "1:442434069091:web:060b80b0dc88f4d8098e56",
 };
 
 const SITE = {
