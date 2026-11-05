@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>한 끼 가이드</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!--BODY-START-->
+<div class="demo-banner" id="demo-banner" hidden>
+  <div class="wrap">데모 모드 · 입력한 내용은 이 브라우저에만 저장되고, 학교 이메일만 넣으면 메일 없이 바로 로그인돼요. <button type="button" id="demo-reset" class="link-btn">데모 초기화</button></div>
+</div>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="logo" href="#home"><span class="logo-mark">★</span> 한 끼 가이드</a>
+    <nav class="nav" id="nav" aria-label="주 메뉴">
+      <a href="#home" data-page="home">홈</a>
+      <a href="#guide" data-page="guide">맛집 찾기</a>
+      <a href="#add" data-page="add">식당 등록</a>
+      <a href="#criteria" data-page="criteria">별 기준</a>
+      <a href="#about" data-page="about">소개</a>
+    </nav>
+    <a class="me-link" id="me-link" href="#me">로그인</a>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+
+  <!-- 홈 -->
+  <section class="page" id="page-home">
+    <div class="hero">
+      <p class="eyebrow">전국 대학생이 함께 만드는 맛집 가이드</p>
+      <h1>대학생이 직접 먹어 보고<br>별을 매긴 우리 동네 식당</h1>
+      <p class="lede">학교 이메일로 인증한 대학생이 식당을 등록하고 5가지 기준으로 채점해요. 채점이 쌓이면 평균으로 별이 붙어요.</p>
+      <div class="hero-actions">
+        <label class="field region-pick" for="home-region">지역
+          <select id="home-region"></select>
+        </label>
+        <a class="btn" href="#guide">맛집 찾기</a>
+        <a class="btn-ghost" href="#add">식당 등록하기</a>
+      </div>
+    </div>
+    <div class="stat-row" id="home-stats"></div>
+    <div class="home-split">
+      <div><h2 class="sec-title" id="home-starred-title">별 받은 식당</h2><div id="home-starred"></div></div>
+      <div><h2 class="sec-title">최근 채점</h2><div id="home-recent"></div></div>
+    </div>
+  </section>
+
+  <!-- 맛집 찾기 -->
+  <section class="page" id="page-guide" hidden>
+    <div class="page-head">
+      <h1>맛집 찾기</h1>
+      <p>별은 학생 채점 평균이에요. 채점한 사람이 <b id="min-raters"></b>명 이상이어야 별이 붙어요.</p>
+    </div>
+    <div class="controls">
+      <div class="control-row">
+        <label class="field" for="g-region">지역<select id="g-region"></select></label>
+        <label class="field" for="g-city">시·군·구<select id="g-city"><option value="">전체</option></select></label>
+        <label class="field" for="g-cat">종류<select id="g-cat"></select></label>
+        <label class="field field-grow" for="search">검색<input type="search" id="search" placeholder="식당, 메뉴, 동네, 학교"></label>
+      </div>
+      <div class="control-row">
+        <label class="field" for="filter">보기
+          <select id="filter">
+            <option value="all">전체</option>
+            <option value="starred">별 받은 곳</option>
+            <option value="hanki">한 끼 추천</option>
+            <option value="few">채점 더 필요</option>
+          </select>
+        </label>
+        <label class="field" for="sort">정렬
+          <select id="sort">
+            <option value="score">점수 높은순</option>
+            <option value="count">채점 많은순</option>
+            <option value="new">새로 등록된순</option>
+            <option value="price-asc">가격 낮은순</option>
+          </select>
+        </label>
+        <span class="result-count" id="result-count" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- 식당 상세 -->
+  <section class="page" id="page-place" hidden></section>
+
+  <!-- 식당 등록 -->
+  <section class="page" id="page-add" hidden>
+    <div class="page-head">
+      <h1>식당 등록</h1>
+      <p>우리 학교 근처 식당을 소개해 주세요. 등록하면 바로 공개되고, 다른 학생들이 채점할 수 있어요.</p>
+    </div>
+    <div id="add-gate"></div>
+    <form class="form form-page" id="add-form" hidden>
+      <div class="form-grid">
+        <label for="a-name">식당 이름 *<input id="a-name" required maxlength="40" placeholder="예: 평남식당"></label>
+        <label for="a-cat">종류 *<select id="a-cat" required></select></label>
+        <label for="a-region">시·도 *<select id="a-region" required></select></label>
+        <label for="a-city">시·군·구 *<input id="a-city" required maxlength="20" placeholder="예: 포항시"></label>
+        <label for="a-area">동네·가까운 곳<input id="a-area" maxlength="30" placeholder="예: 정문 앞, 죽도시장"></label>
+        <label for="a-address">주소<input id="a-address" maxlength="80" placeholder="예: 포항시 북구 중앙로 00"></label>
+        <label for="a-menu">대표 메뉴 *<input id="a-menu" required maxlength="30" placeholder="예: 돼지국밥"></label>
+        <label for="a-price">대표 메뉴 가격(원) *<input id="a-price" required type="number" min="0" max="1000000" step="100" placeholder="9000"></label>
+        <label for="a-hours">영업시간<input id="a-hours" maxlength="40" placeholder="예: 11:00–21:00"></label>
+        <label for="a-closed">휴무<input id="a-closed" maxlength="30" placeholder="예: 일요일"></label>
+      </div>
+      <label for="a-desc">한 줄 소개<textarea id="a-desc" rows="2" maxlength="150" placeholder="어떤 곳인지, 무엇이 좋은지"></textarea></label>
+      <p class="hint">지도 검색이 되도록 실제 가게 이름과 주소를 적어 주세요. 같은 식당이 이미 있는지 먼저 검색해 보세요.</p>
+      <div class="form-foot"><button class="btn" type="submit">등록하기</button><span class="form-msg" id="add-msg" aria-live="polite"></span></div>
+    </form>
+  </section>
+
+  <!-- 별 기준 -->
+  <section class="page" id="page-criteria" hidden>
+    <div class="page-head">
+      <h1>별 기준</h1>
+      <p>모든 식당을 같은 5가지 기준으로 채점해요. 별은 채점한 학생들의 평균으로 자동으로 정해져요.</p>
+    </div>
+    <h2 class="sec-title">채점 항목 (각 1~5점)</h2>
+    <div class="crit-grid" id="crit-grid"></div>
+    <h2 class="sec-title">별과 배지</h2>
+    <div class="legend" id="legend"></div>
+    <h2 class="sec-title">이용 규칙</h2>
+    <ul class="rules">
+      <li>대학 이메일(.ac.kr)로 인증한 사람만 등록·채점할 수 있어요.</li>
+      <li>한 사람은 식당 하나에 한 번만 채점해요. 다시 채점하면 이전 점수가 바뀌어요.</li>
+      <li>직접 가 본 식당만 채점해 주세요. 광고·협찬 글, 욕설, 개인정보가 담긴 글은 운영진이 지워요.</li>
+    </ul>
+  </section>
+
+  <!-- 소개 -->
+  <section class="page" id="page-about" hidden>
+    <div class="page-head">
+      <h1>소개</h1>
+      <p>[과목명] 웹 프로젝트 · [조 이름]</p>
+    </div>
+    <div class="about-intro">
+      <h2 class="sec-title">왜 만들었나요</h2>
+      <p>식당을 찾으려면 블로그, 지도 앱, SNS를 오가야 하고 협찬 후기도 섞여 있어요. 그래서 대학생 눈높이의 같은 기준으로, 학교 이메일로 인증한 학생들이 직접 채점하는 가이드를 만들었습니다. 포항에서 시작해 전국 대학생이 함께 채워 가요.</p>
+    </div>
+    <h2 class="sec-title">만든 사람들</h2>
+    <div class="team-grid" id="team-grid"></div>
+  </section>
+
+  <!-- 로그인 / 내 정보 -->
+  <section class="page" id="page-me" hidden>
+    <div class="page-head"><h1 id="me-title">로그인</h1></div>
+    <div id="me-body"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">[과목명] 웹 프로젝트 · [조 이름] · 식당 정보는 학생들이 입력한 내용이며 바뀔 수 있으니 방문 전 확인하세요.</div>
+</footer>
+<!--BODY-END-->
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

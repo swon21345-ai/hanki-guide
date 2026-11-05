@@ -1,0 +1,75 @@
+rules_version = '2';
+// =============================================================
+//  Firestore 보안 규칙 — 한 끼 가이드
+//  Firebase 콘솔 > Firestore Database > 규칙 탭에 그대로 붙여 넣고 '게시'
+//  - 읽기: 누구나
+//  - 쓰기: 대학 이메일(.ac.kr)로 인증한 사람만
+//  - 운영진: admins/{uid} 문서가 있는 사람 (콘솔에서 직접 만듦)
+// =============================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function student() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.matches('.*[.]ac[.]kr$');
+    }
+    function isAdmin() {
+      return student() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function isText(v, max) { return v is string && v.size() <= max; }
+    function isScore(v) { return v is int && v >= 1 && v <= 5; }
+
+    function validRestaurant(d) {
+      return isText(d.name, 40) && d.name.size() > 0
+        && d.category in ['korean', 'seafood', 'snack', 'global', 'cafe']
+        && isText(d.region, 10) && isText(d.city, 20) && d.city.size() > 0
+        && isText(d.menu, 30) && d.price is int && d.price >= 0 && d.price <= 1000000
+        && (!('area' in d) || isText(d.area, 30))
+        && (!('address' in d) || isText(d.address, 80))
+        && (!('hours' in d) || isText(d.hours, 40))
+        && (!('closed' in d) || isText(d.closed, 40))
+        && (!('desc' in d) || isText(d.desc, 150));
+    }
+    function validRating(d) {
+      return isScore(d.taste) && isScore(d.value) && isScore(d.portion)
+        && isScore(d.solo) && isScore(d.access)
+        && isText(d.text, 120) && isText(d.nickname, 12) && isText(d.school, 20)
+        && isText(d.region, 10) && d.restaurantId is string;
+    }
+
+    match /restaurants/{id} {
+      allow read: if true;
+      allow create: if student()
+        && request.resource.data.createdBy == request.auth.uid
+        && validRestaurant(request.resource.data);
+      allow update: if isAdmin()
+        || (student() && resource.data.createdBy == request.auth.uid
+            && request.resource.data.createdBy == request.auth.uid
+            && validRestaurant(request.resource.data));
+      allow delete: if isAdmin() || (student() && resource.data.createdBy == request.auth.uid);
+    }
+
+    // 문서 id = 식당id_사용자id  → 한 사람은 식당당 하나만 채점
+    match /ratings/{id} {
+      allow read: if true;
+      allow create, update: if student()
+        && id == request.resource.data.restaurantId + '_' + request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && exists(/databases/$(database)/documents/restaurants/$(request.resource.data.restaurantId))
+        && validRating(request.resource.data);
+      allow delete: if isAdmin() || (student() && resource.data.uid == request.auth.uid);
+    }
+
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if student() && request.auth.uid == uid
+        && isText(request.resource.data.nickname, 12) && isText(request.resource.data.school, 20);
+    }
+
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+  }
+}
