@@ -329,12 +329,28 @@ async function sendLogin(e) {
   e.preventDefault();
   const email = $("#l-email").value.trim().toLowerCase();
   const msg = $("#login-msg");
-  if (!SITE.allowedEmail.test(email)) { msg.textContent = "대학 이메일(.ac.kr)만 쓸 수 있어요."; return; }
+  if (!SITE.allowedEmail.test(email)) { msg.textContent = "대학 이메일(.ac.kr)만 쓸 수 있어요. Gmail·네이버 같은 개인 메일은 안 돼요."; return; }
   msg.textContent = "보내는 중…";
   try {
     const res = await Store.sendLoginLink(email);
     msg.textContent = res.instant ? "" : `${email}로 로그인 링크를 보냈어요. 메일함(스팸함 포함)을 확인해 주세요.`;
-  } catch (err) { console.error(err); msg.textContent = "링크를 보내지 못했어요. 주소를 확인하고 잠시 뒤 다시 시도해 주세요."; }
+  } catch (err) { console.error(err); msg.textContent = loginErrorText(err); }
+}
+// Firebase 오류 코드를 사람이 읽을 수 있는 말로
+function loginErrorText(err) {
+  const map = {
+    "auth/operation-not-allowed": "Firebase에서 '이메일 링크' 로그인이 꺼져 있어요. (Authentication → 로그인 방법)",
+    "auth/unauthorized-continue-uri": "이 사이트 주소가 Firebase '승인된 도메인'에 없어요.",
+    "auth/unauthorized-domain": "이 사이트 주소가 Firebase '승인된 도메인'에 없어요.",
+    "auth/invalid-email": "이메일 주소 형식이 올바르지 않아요.",
+    "auth/quota-exceeded": "오늘 보낼 수 있는 로그인 메일 수를 넘었어요. 내일 다시 시도해 주세요.",
+    "auth/too-many-requests": "요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.",
+    "auth/invalid-action-code": "로그인 링크가 만료됐거나 이미 사용됐어요. 링크를 새로 받아 주세요.",
+    "auth/expired-action-code": "로그인 링크가 만료됐어요. 링크를 새로 받아 주세요.",
+    "auth/invalid-api-key": "Firebase 설정값(apiKey)이 올바르지 않아요.",
+    "auth/network-request-failed": "인터넷 연결을 확인해 주세요.",
+  };
+  return (map[err?.code] || "로그인하지 못했어요.") + (err?.code ? ` [${err.code}]` : "");
 }
 async function saveProfile(e) {
   e.preventDefault();
@@ -432,7 +448,10 @@ async function start() {
     }));
   } catch (err) {
     console.error(err);
-    location.hash = "#me";
+    location.hash = "#me"; route();
+    const box = document.createElement("p");
+    box.className = "error-box"; box.textContent = loginErrorText(err);
+    $("#me-body").prepend(box);
   }
 }
 start();

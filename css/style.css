@@ -299,3 +299,5 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .form input[type="number"] { appearance: textfield; }
 @media (max-width: 900px) { .me-layout { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+.error-box { margin: 0 0 16px; padding: 12px 14px; border-radius: 8px; background: var(--chip); color: var(--star); font-weight: 700; }
