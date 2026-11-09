@@ -302,3 +302,32 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 .error-box { margin: 0 0 16px; padding: 12px 14px; border-radius: 8px; background: var(--chip); color: var(--star); font-weight: 700; }
 .uid-row code { font-size: 13px; background: var(--chip); padding: 2px 6px; border-radius: 4px; word-break: break-all; }
+
+/* ===== 카카오맵 ===== */
+.map-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding-block: 12px 4px; }
+.map-search { display: flex; align-items: end; gap: 8px; flex: 1 1 320px; min-width: 0; }
+.check { display: flex; align-items: center; gap: 6px; font-size: 14px; padding-bottom: 8px; }
+.map-note { margin: 6px 0 10px; font-size: 13px; color: var(--muted); }
+.map-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; }
+.map-canvas { height: min(70vh, 640px); min-height: 360px; border-radius: 12px; border: 1px solid var(--line); background: var(--chip); }
+.map-side { display: grid; gap: 12px; align-content: start; max-height: min(70vh, 640px); min-height: 0; overflow-y: auto; }
+.map-panel { display: grid; gap: 10px; padding: 18px; background: var(--surface); border: 2px solid var(--ink); border-radius: 12px; }
+.map-panel h2 { margin: 0; font-family: var(--display); font-size: 22px; color: var(--ink); }
+.map-panel .form-grid { grid-template-columns: 1fr; }
+.map-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.map-list button { font: inherit; width: 100%; text-align: left; display: grid; gap: 2px; padding: 10px 4px; border: none; border-bottom: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; }
+.map-list button:hover, .map-list button.is-on { background: var(--chip); }
+.ml-meta { font-size: 12px; color: var(--muted); }
+.ml-empty { padding: 16px 0; color: var(--muted); font-size: 14px; }
+.pin { font: 700 12px/1 var(--body); cursor: pointer; border: none; }
+.pin-guide { background: #B4421E; color: #FFF8F2; padding: 6px 9px; border-radius: 999px; box-shadow: 0 2px 6px rgba(0,0,0,.3); white-space: nowrap; }
+.pin-kakao { width: 14px; height: 14px; border-radius: 50%; background: #12403F; border: 2px solid #FFFDF7; box-shadow: 0 1px 4px rgba(0,0,0,.35); padding: 0; display: inline-block; }
+.pin.is-on { outline: 3px solid #E2B55A; outline-offset: 1px; transform: scale(1.15); }
+.pin-legend { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; margin-left: 6px; }
+.pin-legend .pin { cursor: default; }
+.mini-map { height: 180px; border-radius: 8px; border: 1px solid var(--line); background: var(--chip); }
+@media (max-width: 900px) {
+  .map-layout { grid-template-columns: 1fr; }
+  .map-canvas { height: 56vh; }
+  .map-side { max-height: none; }
+}

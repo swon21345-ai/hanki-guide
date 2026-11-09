@@ -147,6 +147,10 @@ function bar(c, v) {
 function renderPlace() {
   const el = $("#page-place");
   const r = byId(state.placeId);
+  if (!r && state.loaded.r && state.region && !state._lookedUp) {
+    state._lookedUp = state.placeId;
+    Store.getRestaurant(state.placeId).then((x) => { if (x && x.region !== state.region) setRegion(x.region); }).catch(() => {});
+  }
   if (!r) {
     el.innerHTML = state.loaded.r
       ? `<div class="page-head"><h1>식당을 찾을 수 없어요</h1><p>삭제되었거나 다른 지역에 있을 수 있어요. <a href="#guide">맛집 찾기로 돌아가기</a></p></div>`
@@ -202,7 +206,9 @@ function renderPlace() {
             <div><dt>영업시간</dt><dd class="num">${esc(r.hours || "방문 전 확인")}</dd></div>
             <div><dt>휴무</dt><dd>${esc(r.closed || "방문 전 확인")}</dd></div>
           </dl>
-          <a class="btn btn-block" href="${mapLink(r)}" target="_blank" rel="noopener">카카오맵에서 보기</a>
+          ${typeof r.lat === "number" ? `<div class="mini-map" id="mini-map" role="img" aria-label="${esc(r.name)} 위치 지도"></div>` : ""}
+          ${r.phone ? `<p class="hint">전화 ${esc(r.phone)}</p>` : ""}
+          <a class="btn btn-block" href="${r.placeUrl ? esc(r.placeUrl) : mapLink(r)}" target="_blank" rel="noopener">카카오맵에서 보기</a>
           <p class="source">학생이 입력한 정보예요. 바뀌었을 수 있어요.${r.sourceUrl ? ` <a href="${esc(r.sourceUrl)}" target="_blank" rel="noopener">정보 출처</a>` : ""}</p>
         </div>
         ${canManage ? `<div class="info-card">
@@ -214,6 +220,7 @@ function renderPlace() {
       </aside>
     </div>`;
 
+  renderMiniMap(r);
   $("#rate-form")?.addEventListener("submit", (e) => saveRating(e, r));
   $("#rate-del")?.addEventListener("click", async () => { await Store.deleteRating(r.id, state.user.uid); });
   $("#del-place")?.addEventListener("click", () => { state.confirmDelete = r.id; renderPlace(); });
@@ -391,21 +398,29 @@ function setRegion(region) {
   refresh();
 }
 function refresh() {
+  if (state.page === "map") { drawMarkers(); return; }
   if (document.activeElement?.closest?.("form") && ["place", "me", "add"].includes(state.page)) return;
   renderPage();
 }
 
+// ---------- 지도 페이지 ----------
+function renderMapPage() {
+  $("#m-region").innerHTML = regionOptions(state.region, true);
+  KMap.selected = null; $("#map-panel").hidden = true;
+  renderMap();
+}
+
 // ---------- 라우팅 ----------
-const PAGES = ["home", "guide", "place", "add", "criteria", "about", "me"];
+const PAGES = ["home", "map", "guide", "place", "add", "criteria", "about", "me"];
 function renderPage() {
-  ({ home: renderHome, guide: renderGuide, place: renderPlace, add: renderAdd, me: renderMe }[state.page] || (() => {}))();
+  ({ home: renderHome, map: renderMapPage, guide: renderGuide, place: renderPlace, add: renderAdd, me: renderMe }[state.page] || (() => {}))();
   $("#me-link").textContent = state.user ? (state.profile?.nickname || "내 정보") : "로그인";
 }
 function route() {
   const h = location.hash.replace("#", "");
   if (h.startsWith("place-")) { state.page = "place"; state.placeId = h.slice(6); }
   else state.page = PAGES.includes(h) ? h : "home";
-  state.confirmDelete = null;
+  state.confirmDelete = null; state._lookedUp = null;
   PAGES.forEach((p) => ($("#page-" + p).hidden = p !== state.page));
   document.querySelectorAll("#nav a").forEach((a) => {
     const on = a.dataset.page === state.page || (state.page === "place" && a.dataset.page === "guide");
@@ -421,6 +436,8 @@ function route() {
 function bind() {
   window.addEventListener("hashchange", route);
   $("#home-region").addEventListener("change", (e) => setRegion(e.target.value));
+  $("#m-region").addEventListener("change", (e) => { setRegion(e.target.value); centerOnRegion(e.target.value); });
+  bindMap();
   $("#g-region").addEventListener("change", (e) => setRegion(e.target.value));
   $("#g-city").addEventListener("change", (e) => { state.city = e.target.value; renderGuide(); });
   $("#g-cat").addEventListener("change", (e) => { state.cat = e.target.value; renderGuide(); });

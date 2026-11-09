@@ -13,6 +13,9 @@ const FIREBASE_CONFIG = {
   appId: "1:442434069091:web:060b80b0dc88f4d8098e56",
 };
 
+// 카카오 개발자 콘솔 > 내 애플리케이션 > 앱 키 > JavaScript 키
+const KAKAO_JS_KEY = "여기에_카카오_JAVASCRIPT_KEY";
+
 const SITE = {
   name: "한 끼 가이드",
   allowedEmail: /\.ac\.kr$/i,  // 대학 이메일만 허용 (필요하면 학교 도메인 추가)

@@ -58,6 +58,11 @@ const DemoStore = (() => {
       data.restaurants[id] = { ...r, createdBy: data.me, createdAt: Date.now() }; save(data); emit("restaurants");
       return id;
     },
+    async getRestaurant(id) { return data.restaurants[id] ? { ...data.restaurants[id], id } : null; },
+    async addRestaurantWithId(id, r) {
+      data.restaurants[id] = { ...r, createdBy: data.me, createdAt: Date.now() }; save(data); emit("restaurants");
+      return id;
+    },
     async deleteRestaurant(id) {
       delete data.restaurants[id];
       Object.keys(data.ratings).forEach((k) => { if (k.startsWith(id + "_")) delete data.ratings[k]; });
@@ -145,6 +150,16 @@ const FirebaseStore = (() => {
       await ready;
       const ref = await db.collection("restaurants").add({ ...r, createdBy: auth.currentUser.uid, createdAt: ts() });
       return ref.id;
+    },
+    async getRestaurant(id) {
+      await ready;
+      const d = await db.doc("restaurants/" + id).get();
+      return d.exists ? { ...d.data(), id: d.id, createdAt: toMs(d.data().createdAt) } : null;
+    },
+    async addRestaurantWithId(id, r) {
+      await ready;
+      await db.doc("restaurants/" + id).set({ ...r, createdBy: auth.currentUser.uid, createdAt: ts() });
+      return id;
     },
     async deleteRestaurant(id) { await ready; await db.doc("restaurants/" + id).delete(); },
     async saveRating(r) { await ready; await db.doc(`ratings/${r.restaurantId}_${r.uid}`).set({ ...r, updatedAt: ts() }); },

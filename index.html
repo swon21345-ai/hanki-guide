@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>한 끼 가이드</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <!--BODY-START-->
@@ -18,6 +18,7 @@
     <a class="logo" href="#home"><span class="logo-mark">★</span> 한 끼 가이드</a>
     <nav class="nav" id="nav" aria-label="주 메뉴">
       <a href="#home" data-page="home">홈</a>
+      <a href="#map" data-page="map">지도</a>
       <a href="#guide" data-page="guide">맛집 찾기</a>
       <a href="#add" data-page="add">식당 등록</a>
       <a href="#criteria" data-page="criteria">별 기준</a>
@@ -47,6 +48,33 @@
     <div class="home-split">
       <div><h2 class="sec-title" id="home-starred-title">별 받은 식당</h2><div id="home-starred"></div></div>
       <div><h2 class="sec-title">최근 채점</h2><div id="home-recent"></div></div>
+    </div>
+  </section>
+
+  <!-- 지도 (카카오맵) -->
+  <section class="page" id="page-map" hidden>
+    <div class="page-head">
+      <h1>지도로 찾기</h1>
+      <p>지도를 움직이면 그 화면의 실제 음식점·카페가 카카오맵에서 나타나요. <span class="pin-legend"><span class="pin pin-guide">★</span> 가이드 등록 <span class="pin pin-kakao"></span> 카카오맵 장소</span></p>
+    </div>
+    <div class="map-controls">
+      <label class="field" for="m-region">지역<select id="m-region"></select></label>
+      <form class="map-search" id="map-search" role="search">
+        <label class="field field-grow" for="map-q">장소 검색<input type="search" id="map-q" placeholder="예: 포항 국밥, 영일대 카페"></label>
+        <button class="btn" type="submit">검색</button>
+      </form>
+      <button class="btn-ghost" type="button" id="map-here">이 화면에서 다시 찾기</button>
+      <button class="btn-ghost" type="button" id="map-locate">내 위치</button>
+      <label class="check" for="map-guide-only"><input type="checkbox" id="map-guide-only"> 가이드 식당만</label>
+    </div>
+    <p class="map-note" id="map-note" aria-live="polite"></p>
+    <div class="empty-box" id="map-status" hidden></div>
+    <div class="map-layout">
+      <div class="map-canvas" id="map-canvas"></div>
+      <div class="map-side">
+        <div class="map-panel" id="map-panel" hidden></div>
+        <ul class="map-list" id="map-list"></ul>
+      </div>
     </div>
   </section>
 
@@ -158,9 +186,10 @@
   <div class="wrap">[과목명] 웹 프로젝트 · [조 이름] · 식당 정보는 학생들이 입력한 내용이며 바뀔 수 있으니 방문 전 확인하세요.</div>
 </footer>
 <!--BODY-END-->
-<script src="js/config.js?v=4"></script>
-<script src="js/data.js?v=4"></script>
-<script src="js/store.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/config.js?v=5"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/store.js?v=5"></script>
+<script src="js/map.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>
