@@ -302,6 +302,8 @@ function renderMe() {
       <form class="form" id="profile-form">
         <p class="form-title">공개 프로필 <small>(채점과 함께 보여요)</small></p>
         <p class="hint">로그인한 이메일: ${esc(state.user.email)} · 이메일 주소는 공개되지 않아요.</p>
+        <p class="hint uid-row">내 사용자 ID: <code id="my-uid">${esc(state.user.uid)}</code> <button type="button" class="link-btn" id="copy-uid">복사</button>
+          ${state.isAdmin ? `<span class="badge-hanki">운영진</span>` : ""}</p>
         <label for="p-nick">닉네임 *<input id="p-nick" required maxlength="12" value="${esc(state.profile?.nickname || "")}" placeholder="예: 국밥요정"></label>
         <label for="p-school">학교 *<input id="p-school" required maxlength="20" value="${esc(state.profile?.school || "")}" placeholder="예: 포항공과대학교"></label>
         <div class="form-foot"><button class="btn" type="submit">저장</button><button class="btn-ghost" type="button" id="logout">로그아웃</button><span class="form-msg" id="profile-msg" aria-live="polite"></span></div>
@@ -319,6 +321,10 @@ function renderMe() {
   if (!state.profile) $("#p-school").value = $("#p-school").value || "";
   $("#profile-form").addEventListener("submit", saveProfile);
   $("#logout").addEventListener("click", () => Store.signOut());
+  $("#copy-uid").addEventListener("click", async (e) => {
+    try { await navigator.clipboard.writeText(state.user.uid); e.target.textContent = "복사됨"; }
+    catch { const r = document.createRange(); r.selectNodeContents($("#my-uid")); getSelection().removeAllRanges(); getSelection().addRange(r); }
+  });
   $("#seed-btn")?.addEventListener("click", async () => {
     $("#seed-msg").textContent = "넣는 중…";
     try { const n = await Store.seed(); $("#seed-msg").textContent = `${n}곳을 넣었어요`; } catch { $("#seed-msg").textContent = "실패했어요. 운영진 권한을 확인해 주세요."; }
