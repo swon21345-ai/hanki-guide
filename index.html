@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>한 끼 가이드</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 <!--BODY-START-->
@@ -165,14 +165,18 @@
   <section class="page" id="page-about" hidden>
     <div class="page-head">
       <h1>소개</h1>
-      <p>[과목명] 웹 프로젝트 · [조 이름]</p>
+      <p>대학생이 직접 채점하는 전국 맛집 가이드</p>
     </div>
     <div class="about-intro">
       <h2 class="sec-title">왜 만들었나요</h2>
       <p>식당을 찾으려면 블로그, 지도 앱, SNS를 오가야 하고 협찬 후기도 섞여 있어요. 그래서 대학생 눈높이의 같은 기준으로, 학교 이메일로 인증한 학생들이 직접 채점하는 가이드를 만들었습니다. 포항에서 시작해 전국 대학생이 함께 채워 가요.</p>
     </div>
-    <h2 class="sec-title">만든 사람들</h2>
-    <div class="team-grid" id="team-grid"></div>
+    <h2 class="sec-title">만든 방식</h2>
+    <ul class="rules">
+      <li>HTML · CSS · JavaScript로 화면을 만들고, GitHub Pages로 배포했어요.</li>
+      <li>로그인과 데이터 저장은 Firebase(이메일 링크 인증 · Firestore)를 쓰고, 보안 규칙으로 대학 이메일 인증자만 쓸 수 있게 했어요.</li>
+      <li>지도와 주변 식당 검색은 카카오맵 API로 연결했어요.</li>
+    </ul>
   </section>
 
   <!-- 로그인 / 내 정보 -->
@@ -183,13 +187,13 @@
 </main>
 
 <footer>
-  <div class="wrap">[과목명] 웹 프로젝트 · [조 이름] · 식당 정보는 학생들이 입력한 내용이며 바뀔 수 있으니 방문 전 확인하세요.</div>
+  <div class="wrap">한 끼 가이드 · 식당 정보는 학생들이 입력한 내용이며 바뀔 수 있으니 방문 전 확인하세요.</div>
 </footer>
 <!--BODY-END-->
-<script src="js/config.js?v=5"></script>
-<script src="js/data.js?v=5"></script>
-<script src="js/store.js?v=5"></script>
-<script src="js/map.js?v=5"></script>
-<script src="js/app.js?v=5"></script>
+<script src="js/config.js?v=6"></script>
+<script src="js/data.js?v=6"></script>
+<script src="js/store.js?v=6"></script>
+<script src="js/map.js?v=6"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>

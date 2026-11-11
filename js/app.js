@@ -12,14 +12,6 @@ const CRITERIA = [
   { k: "access",  label: "접근성",    help: "학교·대중교통에서 가기 쉬운가" },
 ];
 
-// 소개 페이지 — 실제 이름·역할로 바꾸세요
-const TEAM = [
-  { name: "[조원 A]", role: "기획 · 메인 화면 디자인" },
-  { name: "[조원 B]", role: "맛집 찾기 화면 · 필터" },
-  { name: "[조원 C]", role: "식당 상세 · 채점 기능" },
-  { name: "[조원 D]", role: "로그인 · 데이터베이스 · 배포" },
-];
-
 const state = {
   page: "home", placeId: null,
   region: "", city: "", cat: "", query: "", filter: "all", sort: "score",
@@ -381,7 +373,6 @@ function renderStatic() {
     <div class="legend-item"><span class="stars s2" aria-hidden="true">★★</span><b>근처라면 꼭 갈 집</b><span>4.0점 이상</span></div>
     <div class="legend-item"><span class="stars s1" aria-hidden="true">★</span><b>믿고 가는 한 끼</b><span>3.5점 이상 · 채점 ${SITE.minRaters}명 이상일 때만</span></div>
     <div class="legend-item"><span class="badge-hanki">한 끼 추천</span><b>가성비 배지</b><span>대표 메뉴 ${won(SITE.hankiPrice)} 이하 + 가성비 4.0점 이상</span></div>`;
-  $("#team-grid").innerHTML = TEAM.map((t) => `<div class="team-card"><b>${esc(t.name)}</b><span>${esc(t.role)}</span></div>`).join("");
 }
 
 // ---------- 데이터 구독 ----------
