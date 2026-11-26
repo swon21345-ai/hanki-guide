@@ -331,3 +331,52 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   .map-canvas { height: 56vh; }
   .map-side { max-height: none; }
 }
+
+
+/* =============================================================
+   사이트 디자인: D. 소프트 앱 (index.html의 <html data-skin="d">로 켜짐)
+   ============================================================= */
+/* ---------- D. 소프트 앱 : 회색 바탕, 둥근 흰 카드, 오렌지 포인트 ---------- */
+html[data-skin="d"]:not([data-x]) {
+  --bg: #F2F4F6; --surface: #FFFFFF; --line: #E5E8EB; --fg: #191F28; --muted: #6B7684;
+  --ink: #191F28; --star: #F2641F; --gold: #D9520F; --chip: #FFEEE5;
+  --badge-bg: #FFEEE5; --badge-fg: #B23E09; --shadow: rgba(16, 24, 40, .10);
+  --display: "Gothic A1", "Noto Sans KR", sans-serif; --body: "Gothic A1", "Noto Sans KR", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-skin="d"]:not([data-x]):not([data-theme="light"]) {
+    --bg: #101215; --surface: #1B1F24; --line: #2C3138; --fg: #ECEEF1; --muted: #9AA3AE;
+    --ink: #ECEEF1; --star: #FF8A4C; --gold: #FF8A4C; --chip: #3A2419; --badge-bg: #3A2419; --badge-fg: #FFB48C;
+    --shadow: rgba(0, 0, 0, .45);
+  }
+}
+html[data-skin="d"][data-theme="dark"]:not([data-x]) {
+  --bg: #101215; --surface: #1B1F24; --line: #2C3138; --fg: #ECEEF1; --muted: #9AA3AE;
+  --ink: #ECEEF1; --star: #FF8A4C; --gold: #FF8A4C; --chip: #3A2419; --badge-bg: #3A2419; --badge-fg: #FFB48C;
+  --shadow: rgba(0, 0, 0, .45);
+}
+html[data-skin="d"] .hero h1, html[data-skin="d"] .page-head h1, html[data-skin="d"] .place-head h1 { font-weight: 800; letter-spacing: -0.03em; }
+html[data-skin="d"] .logo, html[data-skin="d"] .card h3, html[data-skin="d"] .sec-title, html[data-skin="d"] .stat b { font-weight: 800; letter-spacing: -0.02em; }
+html[data-skin="d"] .topbar { background: var(--surface); border-bottom: none; box-shadow: 0 1px 0 var(--line); }
+html[data-skin="d"] .nav a.is-on { background: var(--chip); color: var(--gold); box-shadow: none; border-radius: 10px; }
+html[data-skin="d"] .cards { gap: 16px; }
+html[data-skin="d"] .card { border: none; border-radius: 20px; padding: 20px 22px; box-shadow: 0 1px 3px var(--shadow), 0 6px 16px var(--shadow); }
+html[data-skin="d"] .card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px var(--shadow); }
+html[data-skin="d"] .menu { border-top-color: var(--line); }
+html[data-skin="d"] .btn, html[data-skin="d"] .btn-ghost { border-radius: 12px; padding: 11px 18px; }
+html[data-skin="d"] .btn-ghost { background: var(--surface); border-color: var(--line); }
+html[data-skin="d"] .badge-hanki { border-radius: 999px; }
+html[data-skin="d"] .stat-row { border: none; gap: 12px; }
+html[data-skin="d"] .stat { background: var(--surface); border: none !important; border-radius: 18px; padding: 18px 20px !important; box-shadow: 0 1px 3px var(--shadow); }
+html[data-skin="d"] .sec-title { border-bottom: none; font-size: 20px; padding-bottom: 0; }
+html[data-skin="d"] .info-card, html[data-skin="d"] .form, html[data-skin="d"] .empty-box,
+html[data-skin="d"] .m-sec { border: none; border-radius: 20px; background: var(--surface); box-shadow: 0 1px 3px var(--shadow); }
+html[data-skin="d"] .m-sec { padding: 20px 22px; }
+html[data-skin="d"] .field input, html[data-skin="d"] .field select, html[data-skin="d"] .form input,
+html[data-skin="d"] .form select, html[data-skin="d"] .form textarea { border-radius: 12px; background: var(--bg); border-color: transparent; }
+html[data-skin="d"] .reviews .review { border-bottom-color: var(--line); }
+
+html[data-skin="d"] body { word-break: keep-all; overflow-wrap: anywhere; }
+html[data-skin="d"] .pin-guide { background: #F2641F; color: #FFFFFF; }
+html[data-skin="d"] .pin-kakao { background: #191F28; }
+html[data-skin="d"] .cat-tile { border-radius: 20px; }
